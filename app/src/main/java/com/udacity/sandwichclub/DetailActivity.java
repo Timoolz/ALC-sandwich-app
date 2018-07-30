@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -15,12 +16,32 @@ public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
+    private TextView mTextViewAKAS;
+
+    private TextView mTextViewIngredients;
+
+    private TextView mTextViewOrigin;
+
+    private TextView mTextViewDescription;
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         ImageView ingredientsIv = findViewById(R.id.image_iv);
+
+        mTextViewAKAS =  findViewById(R.id.also_known_tv);
+
+        mTextViewIngredients =  findViewById(R.id.ingredients_tv);
+
+        mTextViewOrigin =  findViewById(R.id.origin_tv);
+
+        mTextViewDescription =  findViewById(R.id.description_tv);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -43,7 +64,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +77,35 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+
+        String alsoKnown = "";
+
+        if(sandwich.getAlsoKnownAs()!=null){
+            for(String xx: sandwich.getAlsoKnownAs()){
+                alsoKnown += xx + ", ";
+            }
+            if(!alsoKnown.isEmpty()){alsoKnown +=" etc";}
+
+            mTextViewAKAS.setText(alsoKnown);
+
+        }
+
+        if(sandwich.getIngredients()!=null){
+            String ingredients = "";
+
+            for(String yy: sandwich.getIngredients()){
+                alsoKnown += yy + ", ";
+            }
+
+            if(!ingredients.isEmpty()){ingredients +=" etc";}
+            mTextViewAKAS.setText(ingredients);
+        }
+
+
+        mTextViewOrigin.setText(sandwich.getPlaceOfOrigin());
+
+        mTextViewDescription.setText(sandwich.getDescription());
 
     }
 }
